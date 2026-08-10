@@ -13,8 +13,12 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() {
 
-        driver = BrowserFactory.initializeBrowser(
-                ConfigReader.getProperty("browser"));
+        String browser = ConfigReader.getProperty("browser");
+
+        boolean headless = Boolean.parseBoolean(
+                ConfigReader.getProperty("headless"));
+
+        driver = BrowserFactory.initializeBrowser(browser, headless);
 
         driver.manage().window().maximize();
 

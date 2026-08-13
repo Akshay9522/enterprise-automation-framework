@@ -15,10 +15,14 @@ public class BaseTest {
 
         String browser = ConfigReader.getProperty("browser");
 
+        boolean incognito = Boolean.parseBoolean(
+                ConfigReader.getProperty("incognito"));
+
         boolean headless = Boolean.parseBoolean(
                 ConfigReader.getProperty("headless"));
 
-        driver = BrowserFactory.initializeBrowser(browser, headless);
+        driver = BrowserFactory.initializeBrowser(browser, headless,
+                incognito);
 
         driver.manage().window().maximize();
 

@@ -11,7 +11,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class BrowserFactory {
 
-    public static WebDriver initializeBrowser(String browser, boolean headless) {
+    public static WebDriver initializeBrowser(String browser, boolean headless, boolean incognito) {
 
         switch (browser.toLowerCase()) {
 
@@ -23,6 +23,10 @@ public class BrowserFactory {
 
                 if (headless) {
                     chromeOptions.addArguments("--headless");
+                }
+
+                if (incognito) {
+                    chromeOptions.addArguments("--incognito");
                 }
 
                 return new ChromeDriver(chromeOptions);
@@ -37,6 +41,10 @@ public class BrowserFactory {
                     firefoxOptions.addArguments("--headless");
                 }
 
+                if (incognito) {
+                    firefoxOptions.addArguments("-private");
+                }
+
                 return new FirefoxDriver(firefoxOptions);
 
             case "edge":
@@ -47,6 +55,10 @@ public class BrowserFactory {
 
                 if (headless) {
                     edgeOptions.addArguments("--headless");
+                }
+
+                if (incognito) {
+                    edgeOptions.addArguments("--inprivate");
                 }
 
                 return new EdgeDriver(edgeOptions);

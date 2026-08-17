@@ -11,7 +11,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class BrowserFactory {
 
-    public static WebDriver initializeBrowser(String browser, boolean headless, boolean incognito) {
+    public static WebDriver initializeBrowser(String browser, boolean headless, boolean incognito, boolean disableNotifications) {
 
         switch (browser.toLowerCase()) {
 
@@ -27,6 +27,10 @@ public class BrowserFactory {
 
                 if (incognito) {
                     chromeOptions.addArguments("--incognito");
+                }
+
+                if (disableNotifications) {
+                    chromeOptions.addArguments("--disable-notifications");
                 }
 
                 return new ChromeDriver(chromeOptions);
@@ -45,6 +49,11 @@ public class BrowserFactory {
                     firefoxOptions.addArguments("-private");
                 }
 
+                if (disableNotifications) {
+                    firefoxOptions.addPreference(
+                            "dom.webnotifications.enabled", false);
+                }
+
                 return new FirefoxDriver(firefoxOptions);
 
             case "edge":
@@ -59,6 +68,10 @@ public class BrowserFactory {
 
                 if (incognito) {
                     edgeOptions.addArguments("--inprivate");
+                }
+
+                if (disableNotifications) {
+                    edgeOptions.addArguments("--disable-notifications");
                 }
 
                 return new EdgeDriver(edgeOptions);

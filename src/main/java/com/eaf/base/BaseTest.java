@@ -21,8 +21,14 @@ public class BaseTest {
         boolean headless = Boolean.parseBoolean(
                 ConfigReader.getProperty("headless"));
 
-        driver = BrowserFactory.initializeBrowser(browser, headless,
-                incognito);
+        boolean disableNotifications = Boolean.parseBoolean(
+                ConfigReader.getProperty("disableNotifications"));
+
+        driver = BrowserFactory.initializeBrowser(
+                browser,
+                headless,
+                incognito,
+                disableNotifications);
 
         driver.manage().window().maximize();
 

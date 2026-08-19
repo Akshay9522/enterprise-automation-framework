@@ -3,24 +3,48 @@ package com.eaf.tests;
 import com.eaf.base.BaseTest;
 import com.eaf.pages.DashboardPage;
 import com.eaf.pages.LoginPage;
+import com.eaf.testdata.LoginData;
+import com.eaf.testdata.provider.LoginDataProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class LoginTest extends BaseTest {
 
-    @Test
-    public void verifySuccessfulLogin() {
+    @Test(
+            dataProvider = "loginData",
+            dataProviderClass = LoginDataProvider.class
+    )
+    public void verifyLogin(LoginData loginData) {
 
         LoginPage loginPage = new LoginPage(driver);
 
-        loginPage.enterUsername("Admin");
-        loginPage.enterPassword("admin123");
+        loginPage.enterUsername(loginData.getUsername());
+        loginPage.enterPassword(loginData.getPassword());
 
-        DashboardPage dashboardPage = loginPage.clickLogin();
+        loginPage.clickLogin();
 
-        Assert.assertTrue(
-                dashboardPage.isDashboardDisplayed(),
-                "Dashboard page is not displayed after successful login"
-        );
+        if (loginData.getExpectedResult().equalsIgnoreCase("Success")) {
+
+            DashboardPage dashboardPage = new DashboardPage(driver);
+
+            Assert.assertTrue(
+                    dashboardPage.isDashboardDisplayed(),
+                    "Dashboard page is not displayed after successful login"
+            );
+
+        } else if (loginData.getExpectedResult().equalsIgnoreCase("Failure")) {
+
+            Assert.assertTrue(
+                    loginPage.isLoginErrorDisplayed(),
+                    "Login error message is not displayed for invalid credentials"
+            );
+
+        } else {
+
+            Assert.fail(
+                    "Unsupported ExpectedResult in Excel: "
+                            + loginData.getExpectedResult()
+            );
+        }
     }
 }

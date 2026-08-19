@@ -16,6 +16,9 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement loginButton;
 
+    @FindBy(xpath = "//p[contains(@class,'oxd-alert-content-text')]")
+    private WebElement loginErrorMessage;
+
     public LoginPage(WebDriver driver) {
         super(driver);
     }
@@ -36,5 +39,12 @@ public class LoginPage extends BasePage {
         loginButton.click();
 
         return new DashboardPage(driver);
+    }
+
+    public boolean isLoginErrorDisplayed() {
+
+        return wait.until(
+                ExpectedConditions.visibilityOf(loginErrorMessage)
+        ).isDisplayed();
     }
 }

@@ -1,5 +1,6 @@
 package com.eaf.factory;
 
+import com.eaf.config.BrowserConfig;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,9 +12,9 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class BrowserFactory {
 
-    public static WebDriver initializeBrowser(String browser, boolean headless, boolean incognito, boolean disableNotifications) {
+    public static WebDriver initializeBrowser(BrowserConfig config) {
 
-        switch (browser.toLowerCase()) {
+        switch (config.getBrowser().toLowerCase()) {
 
             case "chrome":
 
@@ -21,15 +22,15 @@ public class BrowserFactory {
 
                 ChromeOptions chromeOptions = new ChromeOptions();
 
-                if (headless) {
+                if (config.isHeadless()) {
                     chromeOptions.addArguments("--headless");
                 }
 
-                if (incognito) {
+                if (config.isIncognito()) {
                     chromeOptions.addArguments("--incognito");
                 }
 
-                if (disableNotifications) {
+                if (config.isDisableNotifications()) {
                     chromeOptions.addArguments("--disable-notifications");
                 }
 
@@ -41,15 +42,15 @@ public class BrowserFactory {
 
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
 
-                if (headless) {
+                if (config.isHeadless()) {
                     firefoxOptions.addArguments("--headless");
                 }
 
-                if (incognito) {
+                if (config.isIncognito()) {
                     firefoxOptions.addArguments("-private");
                 }
 
-                if (disableNotifications) {
+                if (config.isDisableNotifications()) {
                     firefoxOptions.addPreference(
                             "dom.webnotifications.enabled", false);
                 }
@@ -62,15 +63,15 @@ public class BrowserFactory {
 
                 EdgeOptions edgeOptions = new EdgeOptions();
 
-                if (headless) {
+                if (config.isHeadless()) {
                     edgeOptions.addArguments("--headless");
                 }
 
-                if (incognito) {
+                if (config.isIncognito()) {
                     edgeOptions.addArguments("--inprivate");
                 }
 
-                if (disableNotifications) {
+                if (config.isDisableNotifications()) {
                     edgeOptions.addArguments("--disable-notifications");
                 }
 
@@ -79,7 +80,7 @@ public class BrowserFactory {
             default:
 
                 throw new IllegalArgumentException(
-                        "Unsupported browser: " + browser);
+                        "Unsupported browser: " + config.getBrowser());
         }
     }
 }

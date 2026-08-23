@@ -20,10 +20,6 @@ public class ExcelReaderTest {
             String username =
                     excelReader.getCellData("Login", 1, 1);
 
-            System.out.println(
-                    "Username from Excel: " + username
-            );
-
             Assert.assertEquals(
                     username,
                     "Admin",

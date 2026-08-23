@@ -1,6 +1,7 @@
 package com.eaf.tests;
 
 import com.eaf.base.BaseTest;
+import com.eaf.config.CredentialProvider;
 import com.eaf.pages.DashboardPage;
 import com.eaf.pages.LoginPage;
 import com.eaf.testdata.LoginData;
@@ -10,41 +11,51 @@ import org.testng.annotations.Test;
 
 public class LoginTest extends BaseTest {
 
-    @Test(
-            dataProvider = "loginData",
-            dataProviderClass = LoginDataProvider.class
-    )
-    public void verifyLogin(LoginData loginData) {
+    @Test
+    public void verifyValidLogin() {
 
         LoginPage loginPage = new LoginPage(driver);
 
-        loginPage.enterUsername(loginData.getUsername());
-        loginPage.enterPassword(loginData.getPassword());
+        loginPage.enterUsername(
+                CredentialProvider.getUsername()
+        );
+
+        loginPage.enterPassword(
+                CredentialProvider.getPassword()
+        );
+
+        DashboardPage dashboardPage =
+                loginPage.clickLogin();
+
+        Assert.assertTrue(
+                dashboardPage.isDashboardDisplayed(),
+                "Dashboard is not displayed after valid login"
+        );
+    }
+
+
+    @Test(
+            dataProvider = "invalidLoginData",
+            dataProviderClass = LoginDataProvider.class
+    )
+    public void verifyInvalidLogin(LoginData loginData) {
+
+        LoginPage loginPage = new LoginPage(driver);
+
+        loginPage.enterUsername(
+                loginData.getUsername()
+        );
+
+        loginPage.enterPassword(
+                loginData.getPassword()
+        );
 
         loginPage.clickLogin();
 
-        if (loginData.getExpectedResult().equalsIgnoreCase("Success")) {
-
-            DashboardPage dashboardPage = new DashboardPage(driver);
-
-            Assert.assertTrue(
-                    dashboardPage.isDashboardDisplayed(),
-                    "Dashboard page is not displayed after successful login"
-            );
-
-        } else if (loginData.getExpectedResult().equalsIgnoreCase("Failure")) {
-
-            Assert.assertTrue(
-                    loginPage.isLoginErrorDisplayed(),
-                    "Login error message is not displayed for invalid credentials"
-            );
-
-        } else {
-
-            Assert.fail(
-                    "Unsupported ExpectedResult in Excel: "
-                            + loginData.getExpectedResult()
-            );
-        }
+        Assert.assertTrue(
+                loginPage.isLoginErrorDisplayed(),
+                "Login error message is not displayed for test case: "
+                        + loginData.getTestCase()
+        );
     }
 }

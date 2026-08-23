@@ -6,22 +6,23 @@ import com.eaf.utils.ExcelReader;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginDataProvider {
 
-    @DataProvider(name = "loginData")
-    public static Object[][] getLoginData() throws IOException {
+    @DataProvider(name = "invalidLoginData")
+    public static Object[][] getInvalidLoginData() throws IOException {
 
         String filePath =
                 ConfigReader.getProperty("test.data.file");
+
+        List<LoginData> invalidLoginData = new ArrayList<>();
 
         try (ExcelReader excelReader = new ExcelReader(filePath)) {
 
             int rowCount =
                     excelReader.getRowCount("Login");
-
-            Object[][] data =
-                    new Object[rowCount][1];
 
             for (int row = 1; row <= rowCount; row++) {
 
@@ -37,16 +38,27 @@ public class LoginDataProvider {
                 String expectedResult =
                         excelReader.getCellData("Login", row, 3);
 
-                data[row - 1][0] =
-                        new LoginData(
-                                testCase,
-                                username,
-                                password,
-                                expectedResult
-                        );
-            }
+                if (expectedResult.equalsIgnoreCase("Failure")) {
 
-            return data;
+                    invalidLoginData.add(
+                            new LoginData(
+                                    testCase,
+                                    username,
+                                    password,
+                                    expectedResult
+                            )
+                    );
+                }
+            }
         }
+
+        Object[][] data =
+                new Object[invalidLoginData.size()][1];
+
+        for (int i = 0; i < invalidLoginData.size(); i++) {
+            data[i][0] = invalidLoginData.get(i);
+        }
+
+        return data;
     }
 }

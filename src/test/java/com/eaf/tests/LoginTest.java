@@ -14,7 +14,8 @@ public class LoginTest extends BaseTest {
     @Test
     public void verifyValidLogin() {
 
-        LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage =
+                new LoginPage(getDriver());
 
         loginPage.enterUsername(
                 CredentialProvider.getUsername()
@@ -40,7 +41,8 @@ public class LoginTest extends BaseTest {
     )
     public void verifyInvalidLogin(LoginData loginData) {
 
-        LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage =
+                new LoginPage(getDriver());
 
         loginPage.enterUsername(
                 loginData.getUsername()

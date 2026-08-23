@@ -1,39 +1,39 @@
 package com.eaf.base;
 
-import com.eaf.config.BrowserConfig;
-import com.eaf.config.ConfigReader;
-import com.eaf.factory.BrowserFactory;
+import com.eaf.driver.DriverManager;
+import com.eaf.driver.DriverService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 public class BaseTest {
 
-    protected WebDriver driver;
+    protected final Logger logger =
+            LogManager.getLogger(getClass());
 
     @BeforeMethod
     public void setUp() {
 
-        BrowserConfig browserConfig = new BrowserConfig(
-                ConfigReader.getProperty("browser"),
-               Boolean.parseBoolean(ConfigReader.getProperty("headless")),
-                Boolean.parseBoolean(ConfigReader.getProperty("incognito")),
-                Boolean.parseBoolean(ConfigReader.getProperty("disableNotifications"))
-        );
+        logger.info("Starting test environment setup");
 
-       driver = BrowserFactory.initializeBrowser(browserConfig);
-        driver.manage().window().maximize();
+        DriverService.startDriver();
 
-        driver.manage().deleteAllCookies();
-
-        driver.get(ConfigReader.getProperty("url"));
+        logger.info("Browser initialized successfully");
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
 
-        if (driver != null) {
-            driver.quit();
-        }
+        logger.info("Starting test environment cleanup");
+
+        DriverService.quitDriver();
+
+        logger.info("Browser session closed");
+    }
+
+    public WebDriver getDriver() {
+        return DriverManager.getDriver();
     }
 }

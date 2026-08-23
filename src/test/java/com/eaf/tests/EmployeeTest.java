@@ -18,7 +18,8 @@ public class EmployeeTest extends BaseTest {
     public void verifyEmployeeCreation(EmployeeData employeeData) {
 
         // Login
-        LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage =
+                new LoginPage(getDriver());
 
         loginPage.enterUsername(
                 CredentialProvider.getUsername()
@@ -31,7 +32,7 @@ public class EmployeeTest extends BaseTest {
         loginPage.clickLogin();
 
         // Employee
-        EmployeePage employeePage = new EmployeePage(driver);
+        EmployeePage employeePage = new EmployeePage(getDriver());
 
         employeePage.openPIM();
         employeePage.clickAddEmployee();

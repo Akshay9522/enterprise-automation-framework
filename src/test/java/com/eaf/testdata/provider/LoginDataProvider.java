@@ -17,9 +17,11 @@ public class LoginDataProvider {
         String filePath =
                 ConfigReader.getProperty("test.data.file");
 
-        List<LoginData> invalidLoginData = new ArrayList<>();
+        List<LoginData> invalidLoginData =
+                new ArrayList<>();
 
-        try (ExcelReader excelReader = new ExcelReader(filePath)) {
+        try (ExcelReader excelReader =
+                     new ExcelReader(filePath)) {
 
             int rowCount =
                     excelReader.getRowCount("Login");
@@ -27,16 +29,32 @@ public class LoginDataProvider {
             for (int row = 1; row <= rowCount; row++) {
 
                 String testCase =
-                        excelReader.getCellData("Login", row, 0);
+                        excelReader.getCellData(
+                                "Login",
+                                row,
+                                "TestCase"
+                        );
 
                 String username =
-                        excelReader.getCellData("Login", row, 1);
+                        excelReader.getCellData(
+                                "Login",
+                                row,
+                                "Username"
+                        );
 
                 String password =
-                        excelReader.getCellData("Login", row, 2);
+                        excelReader.getCellData(
+                                "Login",
+                                row,
+                                "Password"
+                        );
 
                 String expectedResult =
-                        excelReader.getCellData("Login", row, 3);
+                        excelReader.getCellData(
+                                "Login",
+                                row,
+                                "ExpectedResult"
+                        );
 
                 if (expectedResult.equalsIgnoreCase("Failure")) {
 
@@ -55,8 +73,12 @@ public class LoginDataProvider {
         Object[][] data =
                 new Object[invalidLoginData.size()][1];
 
-        for (int i = 0; i < invalidLoginData.size(); i++) {
-            data[i][0] = invalidLoginData.get(i);
+        for (int i = 0;
+             i < invalidLoginData.size();
+             i++) {
+
+            data[i][0] =
+                    invalidLoginData.get(i);
         }
 
         return data;

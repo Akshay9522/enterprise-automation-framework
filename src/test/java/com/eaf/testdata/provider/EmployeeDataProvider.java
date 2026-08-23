@@ -26,22 +26,46 @@ public class EmployeeDataProvider {
             for (int row = 1; row <= rowCount; row++) {
 
                 String testCase =
-                        excelReader.getCellData("Employee", row, 0);
+                        excelReader.getCellData(
+                                "Employee",
+                                row,
+                                "TestCase"
+                        );
 
                 String firstName =
-                        excelReader.getCellData("Employee", row, 1);
+                        excelReader.getCellData(
+                                "Employee",
+                                row,
+                                "FirstName"
+                        );
 
                 String middleName =
-                        excelReader.getCellData("Employee", row, 2);
+                        excelReader.getCellData(
+                                "Employee",
+                                row,
+                                "MiddleName"
+                        );
 
                 String lastName =
-                        excelReader.getCellData("Employee", row, 3);
+                        excelReader.getCellData(
+                                "Employee",
+                                row,
+                                "LastName"
+                        );
 
                 String employeeId =
-                        excelReader.getCellData("Employee", row, 4);
+                        excelReader.getCellData(
+                                "Employee",
+                                row,
+                                "EmployeeId"
+                        );
 
                 String expectedResult =
-                        excelReader.getCellData("Employee", row, 5);
+                        excelReader.getCellData(
+                                "Employee",
+                                row,
+                                "ExpectedResult"
+                        );
 
                 data[row - 1][0] =
                         new EmployeeData(

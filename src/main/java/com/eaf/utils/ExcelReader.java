@@ -8,6 +8,7 @@ import java.io.IOException;
 public class ExcelReader implements AutoCloseable {
 
     private final Workbook workbook;
+    private final DataFormatter dataFormatter;
 
     public ExcelReader(String filePath) throws IOException {
 
@@ -17,11 +18,12 @@ public class ExcelReader implements AutoCloseable {
             this.workbook =
                     WorkbookFactory.create(fileInputStream);
         }
+
+        this.dataFormatter = new DataFormatter();
     }
 
 
-    // Existing method:
-    // Reads cell using column number
+    // Read cell using column index
     public String getCellData(
             String sheetName,
             int rowNumber,
@@ -33,8 +35,8 @@ public class ExcelReader implements AutoCloseable {
 
         if (row == null) {
             throw new IllegalArgumentException(
-                    "Row " + rowNumber +
-                            " does not exist in sheet: "
+                    "Row " + rowNumber
+                            + " does not exist in sheet: "
                             + sheetName
             );
         }
@@ -43,9 +45,9 @@ public class ExcelReader implements AutoCloseable {
 
         if (cell == null) {
             throw new IllegalArgumentException(
-                    "Cell at row " + rowNumber +
-                            ", column " + columnNumber +
-                            " does not exist in sheet: "
+                    "Cell at row " + rowNumber
+                            + ", column " + columnNumber
+                            + " does not exist in sheet: "
                             + sheetName
             );
         }
@@ -54,8 +56,7 @@ public class ExcelReader implements AutoCloseable {
     }
 
 
-    // New overloaded method:
-    // Reads cell using Excel column/header name
+    // Read cell using Excel header name
     public String getCellData(
             String sheetName,
             int rowNumber,
@@ -72,27 +73,15 @@ public class ExcelReader implements AutoCloseable {
             );
         }
 
-        int columnNumber = -1;
-
-        for (Cell cell : headerRow) {
-
-            String headerValue =
-                    getCellValue(cell);
-
-            if (headerValue.trim()
-                    .equalsIgnoreCase(columnName.trim())) {
-
-                columnNumber =
-                        cell.getColumnIndex();
-
-                break;
-            }
-        }
+        int columnNumber = findColumnNumber(
+                headerRow,
+                columnName
+        );
 
         if (columnNumber == -1) {
             throw new IllegalArgumentException(
-                    "Column '" + columnName +
-                            "' does not exist in sheet: "
+                    "Column '" + columnName
+                            + "' does not exist in sheet: "
                             + sheetName
             );
         }
@@ -127,6 +116,43 @@ public class ExcelReader implements AutoCloseable {
     }
 
 
+    private int findColumnNumber(
+            Row headerRow,
+            String columnName) {
+
+        String expectedHeader =
+                normalizeHeader(columnName);
+
+        for (Cell cell : headerRow) {
+
+            String actualHeader =
+                    normalizeHeader(
+                            getCellValue(cell)
+                    );
+
+            if (actualHeader.equals(expectedHeader)) {
+
+                return cell.getColumnIndex();
+            }
+        }
+
+        return -1;
+    }
+
+
+    private String normalizeHeader(String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+        return value
+                .replaceAll("\\s+", "")
+                .trim()
+                .toLowerCase();
+    }
+
+
     private Sheet getSheet(String sheetName) {
 
         Sheet sheet =
@@ -134,8 +160,8 @@ public class ExcelReader implements AutoCloseable {
 
         if (sheet == null) {
             throw new IllegalArgumentException(
-                    "Sheet '" + sheetName +
-                            "' does not exist in Excel workbook."
+                    "Sheet '" + sheetName
+                            + "' does not exist in Excel workbook."
             );
         }
 
@@ -144,9 +170,6 @@ public class ExcelReader implements AutoCloseable {
 
 
     private String getCellValue(Cell cell) {
-
-        DataFormatter dataFormatter =
-                new DataFormatter();
 
         return dataFormatter.formatCellValue(cell);
     }

@@ -14,16 +14,5 @@ public class LoginDataProviderTest {
                 "Test Case: " + loginData.getTestCase()
         );
 
-        System.out.println(
-                "Username: " + loginData.getUsername()
-        );
-
-        System.out.println(
-                "Password: " + loginData.getPassword()
-        );
-
-        System.out.println(
-                "Expected Result: " + loginData.getExpectedResult()
-        );
     }
 }

@@ -1,6 +1,7 @@
 package com.eaf.tests;
 
 import com.eaf.base.BaseTest;
+import com.eaf.config.CredentialProvider;
 import com.eaf.pages.EmployeePage;
 import com.eaf.pages.LoginPage;
 import com.eaf.testdata.EmployeeData;
@@ -19,8 +20,13 @@ public class EmployeeTest extends BaseTest {
         // Login
         LoginPage loginPage = new LoginPage(driver);
 
-        loginPage.enterUsername("Admin");
-        loginPage.enterPassword("admin123");
+        loginPage.enterUsername(
+                CredentialProvider.getUsername()
+        );
+
+        loginPage.enterPassword(
+                CredentialProvider.getPassword()
+        );
 
         loginPage.clickLogin();
 

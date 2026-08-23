@@ -3,7 +3,6 @@ package com.eaf.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginPage extends BasePage {
 
@@ -22,29 +21,20 @@ public class LoginPage extends BasePage {
     public LoginPage(WebDriver driver) {
         super(driver);
     }
-
     public void enterUsername(String usernameValue) {
-        wait.until(ExpectedConditions.visibilityOf(username));
-        username.sendKeys(usernameValue);
+        enterText(username, usernameValue);
     }
 
     public void enterPassword(String passwordValue) {
-        wait.until(ExpectedConditions.visibilityOf(password));
-        password.sendKeys(passwordValue);
+        enterText(password, passwordValue);
     }
 
     public DashboardPage clickLogin() {
-
-        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
-        loginButton.click();
-
+        click(loginButton);
         return new DashboardPage(driver);
     }
 
     public boolean isLoginErrorDisplayed() {
-
-        return wait.until(
-                ExpectedConditions.visibilityOf(loginErrorMessage)
-        ).isDisplayed();
+        return isDisplayed(loginErrorMessage);
     }
 }

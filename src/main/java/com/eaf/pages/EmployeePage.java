@@ -36,6 +36,8 @@ public class EmployeePage extends BasePage {
     @FindBy(xpath = "//h6[text()='Personal Details']")
     private WebElement personalDetailsHeader;
 
+    @FindBy(className = "oxd-form-loader")
+    private WebElement formLoader;
 
     public EmployeePage(WebDriver driver) {
         super(driver);
@@ -43,85 +45,42 @@ public class EmployeePage extends BasePage {
 
 
     public void openPIM() {
-
-        wait.until(
-                ExpectedConditions.elementToBeClickable(pimMenu)
-        );
-
-        pimMenu.click();
+        click(pimMenu);
     }
-
 
     public void clickAddEmployee() {
-
-        wait.until(
-                ExpectedConditions.elementToBeClickable(addEmployee)
-        );
-
-        addEmployee.click();
+        click(addEmployee);
     }
-
 
     public void enterFirstName(String firstNameValue) {
-
-        wait.until(
-                ExpectedConditions.visibilityOf(firstName)
-        );
-
-        firstName.clear();
-        firstName.sendKeys(firstNameValue);
+        enterText(firstName, firstNameValue);
     }
-
 
     public void enterMiddleName(String middleNameValue) {
-
-        wait.until(
-                ExpectedConditions.visibilityOf(middleName)
-        );
-
-        middleName.clear();
-        middleName.sendKeys(middleNameValue);
+        enterText(middleName, middleNameValue);
     }
-
 
     public void enterLastName(String lastNameValue) {
-
-        wait.until(
-                ExpectedConditions.visibilityOf(lastName)
-        );
-
-        lastName.clear();
-        lastName.sendKeys(lastNameValue);
+        enterText(lastName, lastNameValue);
     }
-
 
     public void enterEmployeeId(String employeeIdValue) {
-
-        wait.until(
-                ExpectedConditions.visibilityOf(employeeId)
-        );
-
-        employeeId.clear();
-        employeeId.sendKeys(employeeIdValue);
+        enterText(employeeId, employeeIdValue);
     }
-
 
     public void clickSave() {
 
+        // Application-specific synchronization:
+        // wait until OrangeHRM form loader disappears
         wait.until(
-                ExpectedConditions.elementToBeClickable(saveButton)
+                ExpectedConditions.invisibilityOf(formLoader)
         );
 
-        saveButton.click();
+        // Generic Selenium action from BasePage
+        click(saveButton);
     }
 
-
     public boolean isPersonalDetailsDisplayed() {
-
-        wait.until(
-                ExpectedConditions.visibilityOf(personalDetailsHeader)
-        );
-
-        return personalDetailsHeader.isDisplayed();
+        return isDisplayed(personalDetailsHeader);
     }
 }

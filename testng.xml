@@ -2,7 +2,7 @@
 
 <suite name="Automation Suite"
        parallel="methods"
-       thread-count="2">
+       thread-count="4">
 
     <listeners>
         <listener class-name="com.eaf.listeners.TestListener"/>

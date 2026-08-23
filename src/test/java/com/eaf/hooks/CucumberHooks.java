@@ -2,14 +2,12 @@ package com.eaf.hooks;
 
 import com.eaf.driver.DriverManager;
 import com.eaf.driver.DriverService;
+import com.eaf.utils.ScreenshotUtil;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 
 public class CucumberHooks {
 
@@ -43,14 +41,10 @@ public class CucumberHooks {
                         scenario.getName()
                 );
 
-                WebDriver driver =
-                        DriverManager.getDriver();
-
                 byte[] screenshot =
-                        ((TakesScreenshot) driver)
-                                .getScreenshotAs(
-                                        OutputType.BYTES
-                                );
+                        ScreenshotUtil.captureAsBytes(
+                                DriverManager.getDriver()
+                        );
 
                 scenario.attach(
                         screenshot,
